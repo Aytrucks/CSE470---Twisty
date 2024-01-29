@@ -21,6 +21,12 @@ var colors = [];
 var colorTimer = 0;
 var colorTimerLoc;
 
+var colorTimer2 = 0;
+var colorTimerLoc2;
+
+var colorTimer3 = 0;
+var colorTimerLoc3;
+
 //HW470: control the rotation
 //(Your variable here)
 var theta = 0.0;
@@ -142,6 +148,8 @@ window.onload = function init()
 	//HW470: associate shader explode variable ("Loc" variables defined here) 
     thetaLoc = gl.getUniformLocation( program, "theta" );
     colorTimerLoc = gl.getUniformLocation(program, "colorTimer");
+    colorTimerLoc2 = gl.getUniformLocation(program, "colorTimer2");
+    colorTimerLoc3 = gl.getUniformLocation(program, "colorTimer3");
     
     console.log("Data loaded to GPU -- Now call render");
 
@@ -167,22 +175,33 @@ function render()
     
 	timer += 0.05;
     colorTimer += (direction ? 0.01 : -0.01);
+    colorTimer2 += (direction ? 0.02 : -0.02);
+    colorTimer3 += (direction ? 0.01 : -0.01);
+
     
     gl.uniform1f(colorTimerLoc,colorTimer);
+    gl.uniform1f(colorTimerLoc2,colorTimer2);
+    gl.uniform1f(colorTimerLoc3,colorTimer3/2);
+
     //console.log(timer);
-    if(timer > 6.283){
+    if(timer > 6.4){
         console.log("HJIT");
         direction = !direction;
+        // deltaRadians = deltaRadians * 2;
+        // if(deltaRadians > 100){
+        //     deltaRadians = 0.05;
+        //     theta = 0;
+        // }
         timer = 0;
     }
-    console.log(colorTimer);
+    //console.log(colorTimer);
+    console.log(theta);
 	//HW470: draw the object
 	// You will need to change this to create the twisting outer parts effect
 	// Hint: you will need more than one draw function call
     gl.drawArrays(gl.TRIANGLE_STRIP,24,3)
-    gl.uniform1f(colorTimerLoc,colorTimer/3.0);
     gl.drawArrays(gl.TRIANGLE_STRIP,27,3)
-    gl.uniform1f(colorTimerLoc,colorTimer/1.5);
+    
     gl.drawArrays(gl.TRIANGLE_STRIP,30,3)
     
 
@@ -192,12 +211,27 @@ function render()
     
     gl.drawArrays(gl.TRIANGLE_STRIP,0,5)
 
-    gl.uniform1f(colorTimerLoc,colorTimer/2.0);
     gl.uniform1f(thetaLoc,0.0);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 4, 4);  
+    
+    gl.uniform1f(colorTimerLoc,0.1);
+    gl.uniform1f(colorTimerLoc2,0.9);
+    gl.uniform1f(colorTimerLoc3,0.9);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 4, 4);
+    
+    gl.uniform1f(colorTimerLoc,0.1);
+    gl.uniform1f(colorTimerLoc2,0.0);
+    gl.uniform1f(colorTimerLoc3,0.9);  
     gl.drawArrays(gl.TRIANGLE_STRIP, 8, 4);
-    gl.uniform1f(colorTimerLoc,1.0);
+    
+    gl.uniform1f(colorTimerLoc,0.9);
+    gl.uniform1f(colorTimerLoc2,0.4);
+    gl.uniform1f(colorTimerLoc3,0.6);
     gl.drawArrays(gl.TRIANGLE_STRIP,12,3);
+    
+    gl.uniform1f(colorTimerLoc,0.8);
+    gl.uniform1f(colorTimerLoc2,0.9);
+    gl.uniform1f(colorTimerLoc3,0.1);
+
     gl.drawArrays(gl.TRIANGLE_STRIP,15,3) 
       
     //gl.drawArrays(gl.POINT, 2,1);

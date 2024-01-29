@@ -17,6 +17,8 @@ attribute vec4 vPosition;
 uniform float theta;
 uniform float ypos;
 uniform float colorTimer;
+uniform float colorTimer2;
+uniform float colorTimer3;
 
 //incoming color attribute and varying for fragment shader
 attribute vec3 vColor;
@@ -48,9 +50,9 @@ main()
 	// for example interpolate between current red component and 1.0 
 	float red = (1.0-colorTimer);
 	
-	float green = (1.0-colorTimer);
+	float green = (1.0-colorTimer2);
 	
-	float blue = (1.0-colorTimer);
+	float blue = (1.0-colorTimer3);
 
     //set the varying color for the fragment shader 
     color = vec4(red, green, blue, 1.0);
