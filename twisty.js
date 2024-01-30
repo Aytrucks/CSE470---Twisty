@@ -63,39 +63,64 @@ window.onload = function init()
     //The verticies are made to be created as seperate triangle strips that look combined when properly coded
     //Some triangles go under other triangles to maintain the illusion of how the parts appear under other objects
     vertices = [
-        vec2(0, 0.5),
-        vec2(-.5, 0),
-        vec2(.5, 0),
-        vec2(0,-0.9),
-        vec2(-0.5,0),
-        vec2(-0.8,0),
-        vec2(-0.6,0.8),
-        vec2(-0.5,0),
-        vec2(0.5,0),
-        vec2(0.8,0),
-        vec2(0.6,0.8),
-        vec2(0.5,0),
-        vec2(-0.5,0),
-        vec2(-0.8,0),
-        vec2(0,-0.9),
-        vec2(0.5,0),
-        vec2(0.8,0),
-        vec2(0,-0.9),
-        vec2(-0.5,-0.2),
-        vec2(-0.7,-0.6),
-        vec2(0,-0.2),
-        vec2(0.5,-0.2),
-        vec2(0.7,-0.6),
-        vec2(0,-0.2),
-        vec2(-0.7,-0.6),
-        vec2(-0.5,-0.75),
-        vec2(-0.5,-0.25),
-        vec2(0.7,-0.6),
-        vec2(0.5,-0.75),
-        vec2(0.5,-0.25),
-        vec2(0,0.75),
-        vec2(-0.25,0),
-        vec2(0.25,0)
+        //First four inner triangles
+        vec2(-0.7, 0.0),       
+        vec2(-0.2, 0.25),       
+        vec2(-0.2, -0.25),        
+        
+        vec2(0.7, 0.0),
+        vec2(0.2, 0.25),
+        vec2(0.2, -0.25),
+        
+        vec2(0.0, 0.7),
+        vec2(-0.25, 0.2),
+        vec2(0.25, 0.2),
+        
+        vec2(0.0, -0.7),
+        vec2(-0.25, -0.2),
+        vec2(0.25, -0.2),
+        
+        //Four outer spires around the triangles revolving maybe?
+        vec2(-0.25,0.25),
+        vec2(-0.6,0.25),
+        vec2(-0.25,0.6),
+        vec2(-0.9,0.9),
+       
+        vec2(0.25,0.25),
+        vec2(0.6,0.25),
+        vec2(0.25,0.6),
+        vec2(0.9,0.9),
+
+        vec2(0.25,-0.25),
+        vec2(0.6,-0.25),
+        vec2(0.25,-0.6),
+        vec2(0.9,-0.9),
+
+        vec2(-0.25,-0.25),
+        vec2(-0.6,-0.25),
+        vec2(-0.25,-0.6),
+        vec2(-0.9,-0.9),
+        
+        //Four squares revolving around the triangles
+        vec2(0.0,1.2),
+        vec2(-0.1,1.1),
+        vec2(0.1,1.1),
+        vec2(0.0,1.0),
+       
+        vec2(1.2,0.0),
+        vec2(1.1,0.1),
+        vec2(1.1,-0.1),
+        vec2(1.0,0.0),
+
+        vec2(0.0,-1.2),
+        vec2(-0.1,-1.1),
+        vec2(0.1,-1.1),
+        vec2(0.0,-1.0),
+
+        vec2(-1.2,0.0),
+        vec2(-1.1,0.1),
+        vec2(-1.1,-0.1),
+        vec2(-1.0,0.0),
     ];
 	 
 	
@@ -156,8 +181,16 @@ window.onload = function init()
     render();
 };
 
+//function to select colors for specific geometry
+function cselec(ct, ct2, ct3){
+    gl.uniform1f(colorTimerLoc,ct);
+    gl.uniform1f(colorTimerLoc2,ct2);
+    gl.uniform1f(colorTimerLoc3,ct3);
+}
 
 // =============== function render ======================
+
+
 
 function render()
 {
@@ -171,21 +204,20 @@ function render()
 	
     theta += (direction ? deltaRadians : -deltaRadians);
     gl.uniform1f(thetaLoc, theta);
-    colors.push(vec3(theta,theta,theta));
+    //colors.push(vec3(theta,theta,theta));
     
 	timer += 0.05;
     colorTimer += (direction ? 0.01 : -0.01);
-    colorTimer2 += (direction ? 0.02 : -0.02);
+    colorTimer2 += (direction ? 0.01 : -0.01);
     colorTimer3 += (direction ? 0.01 : -0.01);
 
     
-    gl.uniform1f(colorTimerLoc,colorTimer);
-    gl.uniform1f(colorTimerLoc2,colorTimer2);
-    gl.uniform1f(colorTimerLoc3,colorTimer3/2);
+    //The geometry that uses this function below is the one with their colors interpolated
+    
 
     //console.log(timer);
     if(timer > 6.4){
-        console.log("HJIT");
+        console.log("HIT");
         direction = !direction;
         // deltaRadians = deltaRadians * 2;
         // if(deltaRadians > 100){
@@ -195,45 +227,50 @@ function render()
         timer = 0;
     }
     //console.log(colorTimer);
-    console.log(theta);
+    //console.log(theta);
 	//HW470: draw the object
 	// You will need to change this to create the twisting outer parts effect
 	// Hint: you will need more than one draw function call
-    gl.drawArrays(gl.TRIANGLE_STRIP,24,3)
-    gl.drawArrays(gl.TRIANGLE_STRIP,27,3)
-    
-    gl.drawArrays(gl.TRIANGLE_STRIP,30,3)
-    
 
-    
-    gl.drawArrays(gl.TRIANGLE_STRIP,18,3)
-    gl.drawArrays(gl.TRIANGLE_STRIP,21,3)
-    
-    gl.drawArrays(gl.TRIANGLE_STRIP,0,5)
 
-    gl.uniform1f(thetaLoc,0.0);
-    
-    gl.uniform1f(colorTimerLoc,0.1);
-    gl.uniform1f(colorTimerLoc2,0.9);
-    gl.uniform1f(colorTimerLoc3,0.9);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 4, 4);
-    
-    gl.uniform1f(colorTimerLoc,0.1);
-    gl.uniform1f(colorTimerLoc2,0.0);
-    gl.uniform1f(colorTimerLoc3,0.9);  
-    gl.drawArrays(gl.TRIANGLE_STRIP, 8, 4);
-    
-    gl.uniform1f(colorTimerLoc,0.9);
-    gl.uniform1f(colorTimerLoc2,0.4);
-    gl.uniform1f(colorTimerLoc3,0.6);
-    gl.drawArrays(gl.TRIANGLE_STRIP,12,3);
-    
-    gl.uniform1f(colorTimerLoc,0.8);
-    gl.uniform1f(colorTimerLoc2,0.9);
-    gl.uniform1f(colorTimerLoc3,0.1);
 
-    gl.drawArrays(gl.TRIANGLE_STRIP,15,3) 
-      
+    cselec(0.0,0.0,colorTimer3)
+
+    gl.uniform1f(thetaLoc,theta)
+    gl.drawArrays(gl.TRIANGLE_STRIP,12,4)
+    gl.drawArrays(gl.TRIANGLE_STRIP,16,4)
+    
+    cselec(colorTimer,colorTimer2,colorTimer3)
+    gl.drawArrays(gl.TRIANGLE_STRIP,20,4)
+    gl.drawArrays(gl.TRIANGLE_STRIP,24,4)
+    
+    cselec(0.0,colorTimer2,colorTimer3)
+    gl.drawArrays(gl.TRIANGLE_STRIP,28,4)
+    cselec(0.0,colorTimer2,0.0)
+    gl.drawArrays(gl.TRIANGLE_STRIP,32,4)
+    
+    cselec(colorTimer,colorTimer2/50,colorTimer3/50)
+    gl.drawArrays(gl.TRIANGLE_STRIP,36,4)
+    
+    cselec(colorTimer,colorTimer2/25,colorTimer3/2)
+    gl.drawArrays(gl.TRIANGLE_STRIP,40,4)
+ 
+    
+  
+    cselec(0.8,0.9,0.1/2)
+  
+    
+    gl.uniform1f(thetaLoc,1.5)
+
+
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,3)
+    gl.drawArrays(gl.TRIANGLE_STRIP,3,3)
+    gl.drawArrays(gl.TRIANGLE_STRIP,6,3)
+    gl.drawArrays(gl.TRIANGLE_STRIP,9,3)
+    //gl.uniform1f(thetaLoc,theta)
+    
+    
+    //gl.drawArrays(gl.POINTS,3,1)
     //gl.drawArrays(gl.POINT, 2,1);
 
 

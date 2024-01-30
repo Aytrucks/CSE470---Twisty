@@ -29,21 +29,22 @@ main()
 {
 	// HW470: twisty the geometry x,y coords and set z and w
 	// Change the code below.
-	
-	float s = sin( theta );
-	float c = cos( theta );
+	float dist = sqrt(vPosition.x * vPosition.x + vPosition.y * vPosition.y)/2.0;
+
+	float s = sin( theta * dist);
+	float c = cos( theta);
 	
 	gl_Position.x = c * vPosition.x - s * vPosition.y;
 	gl_Position.y = s * vPosition.x + c * vPosition.y;
     gl_Position.z = 0.0;
-    gl_Position.w = 1.0;
+    gl_Position.w = 1.5;
 	
 	// common mistake: using integer instead of float
 	// gl_Position.w = 1; 
 	//     -- this would result in an error
 	// common mistake: trying to change a uniform variable here
 	
-	gl_PointSize = 100.0;
+	gl_PointSize = 25.0;
 	//HW470: Modify color   
 	// colors are between 0 and 1. 
 	// You will need to do linear interpolation
